@@ -1,0 +1,449 @@
+/* =========================================================
+ * Global Theme Variables hydrated from settings.json
+ * ========================================================= */
+:root {
+  --color-primary: #1b1b2f;
+  --color-accent: #00ffc6;
+  --color-secondary: #ff3366;
+  --color-bg: #0d0d17;
+  --color-text: #ffffff;
+  --font-heading: 'Press Start 2P', cursive;
+  --font-body: 'Rubik', sans-serif;
+}
+
+/* =========================================================
+ * Base Layout and Typography
+ * ========================================================= */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1,
+ h2,
+ h3,
+ h4 {
+  font-family: var(--font-heading);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+p {
+  line-height: 1.6;
+  margin: 0 0 1.2rem;
+}
+
+/* =========================================================
+ * Animated Background Canvas
+ * ========================================================= */
+.arcade-bg {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(130deg, var(--color-primary), var(--color-bg));
+  z-index: -2;
+  animation: shift 12s infinite alternate ease-in-out;
+}
+
+@keyframes shift {
+  0% {
+    filter: hue-rotate(0deg);
+    transform: scale(1);
+  }
+  50% {
+    filter: hue-rotate(20deg);
+    transform: scale(1.02);
+  }
+  100% {
+    filter: hue-rotate(-20deg);
+    transform: scale(1.04);
+  }
+}
+
+/* =========================================================
+ * Application Shell Structure
+ * ========================================================= */
+.app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.app-header,
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.app-title {
+  font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
+  margin: 0;
+}
+
+.status-pill {
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  background: rgba(0, 255, 198, 0.1);
+  color: var(--color-accent);
+  font-weight: 600;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.app-main {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  position: relative;
+  overflow: hidden;
+}
+
+/* =========================================================
+ * Screen Management Transitions
+ * ========================================================= */
+.app-screen {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.app-screen.is-active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.screen-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* =========================================================
+ * Button Patterns
+ * ========================================================= */
+.arcade-btn {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border: none;
+  padding: 1rem 2.2rem;
+  font-weight: 700;
+  border-radius: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.arcade-btn:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 12px 25px rgba(0, 255, 198, 0.3);
+}
+
+.arcade-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 10px var(--color-accent);
+}
+
+.arcade-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.arcade-btn--ghost {
+  background: transparent;
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+}
+
+/* =========================================================
+ * Employee Selection Grid
+ * ========================================================= */
+.employee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.25rem;
+}
+
+.employee-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid transparent;
+  border-radius: 18px;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition: border 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.employee-card.is-selected {
+  border-color: var(--color-accent);
+  box-shadow: 0 12px 30px rgba(0, 255, 198, 0.25);
+  transform: translateY(-6px);
+}
+
+.employee-card span {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.employee-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(0, 255, 198, 0.2), rgba(255, 51, 102, 0.2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--color-accent);
+  overflow: hidden;
+}
+
+.employee-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.selection-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+ * Game Container Styling
+ * ========================================================= */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.progress-display {
+  display: flex;
+  gap: 1rem;
+  font-weight: 600;
+}
+
+.game-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 1.5rem;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* =========================================================
+ * Leaderboard Styling
+ * ========================================================= */
+.score-summary {
+  display: flex;
+  gap: 1.5rem;
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.leaderboard-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.leaderboard-entry {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* =========================================================
+ * Utility Helpers
+ * ========================================================= */
+.hidden {
+  display: none !important;
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+/* =========================================================
+ * Responsive Rules
+ * ========================================================= */
+@media (max-width: 768px) {
+  .app-shell {
+    padding: 1.5rem 1rem 2.5rem;
+  }
+
+  .game-container {
+    padding: 1rem;
+    min-height: 260px;
+  }
+
+  .employee-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .app-header,
+  .app-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .selection-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .arcade-btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* =========================================================
+ * Quiz Clash Styling
+ * ========================================================= */
+.quiz-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: center;
+}
+
+.quiz-question {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: 600;
+}
+
+.quiz-answers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.quiz-progress {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* =========================================================
+ * Quick Tap Styling
+ * ========================================================= */
+.reaction-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+}
+
+.reaction-status {
+  font-weight: 600;
+}
+
+.reaction-pad {
+  width: min(320px, 100%);
+  height: 180px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text);
+  transition: background 0.2s ease;
+}
+
+/* =========================================================
+ * Runner and Driver Canvas Styling
+ * ========================================================= */
+.runner-canvas,
+.driver-canvas {
+  width: min(100%, 640px);
+  max-width: 100%;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* =========================================================
+ * Escape Grid Styling
+ * ========================================================= */
+.escape-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.escape-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.escape-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
+}
+
+.escape-cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  display: grid;
+  place-items: center;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+.escape-player {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 700;
+}
+
+.escape-exit {
+  border: 2px dashed var(--color-secondary);
+  color: var(--color-secondary);
+  font-weight: 700;
+}

@@ -1,0 +1,10 @@
+{
+  "theme": {
+    "primary": "#1b1b2f",
+    "accent": "#00ffc6",
+    "secondary": "#ff3366",
+    "bg": "#0d0d17",
+    "text": "#ffffff"
+  },
+  "gameOrder": ["quiz", "jump", "reaction", "driver", "escape"]
+}
