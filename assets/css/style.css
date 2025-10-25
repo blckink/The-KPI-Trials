@@ -524,3 +524,149 @@ p {
     align-items: flex-start;
   }
 }
+
+/* =========================================================
+ * Void Vault – Metroidvania presentation
+ * ========================================================= */
+.void-vault-canvas {
+  width: min(100%, 760px);
+  max-width: 100%;
+  aspect-ratio: 12 / 7;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(160deg, rgba(10, 14, 32, 0.95), rgba(4, 5, 16, 0.92));
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55);
+}
+
+.void-vault-hud {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.18));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--color-text);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.void-vault-hud__title {
+  font-family: var(--font-heading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+.void-vault-hud__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  font-weight: 600;
+}
+
+.void-vault-hud__stats span {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.void-vault-hud__hint {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.void-vault-controls {
+  position: absolute;
+  bottom: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+  pointer-events: auto;
+  z-index: 3;
+}
+
+.void-vault-controls button {
+  min-width: 64px;
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(145deg, rgba(0, 255, 198, 0.18), rgba(0, 0, 0, 0.55));
+  color: var(--color-text);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+}
+
+.void-vault-controls button:active {
+  transform: translateY(1px);
+}
+
+@media (min-width: 768px) {
+  .void-vault-controls {
+    gap: 1.4rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .void-vault-controls {
+    bottom: 1.5rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .void-vault-controls button {
+    min-width: 72px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .void-vault-controls {
+    display: none;
+  }
+}
+
+/* =========================================================
+ * Track Velocity – Touch helpers
+ * ========================================================= */
+.track-velocity-controls {
+  position: absolute;
+  bottom: 1.2rem;
+  right: 1.2rem;
+  display: flex;
+  gap: 0.8rem;
+  pointer-events: auto;
+  z-index: 3;
+}
+
+.track-velocity-controls button {
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(145deg, rgba(255, 51, 102, 0.25), rgba(0, 0, 0, 0.55));
+  color: var(--color-text);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
+}
+
+.track-velocity-controls button:active {
+  transform: translateY(1px);
+}
+
+@media (min-width: 1080px) {
+  .track-velocity-controls {
+    display: none;
+  }
+}
