@@ -20,6 +20,7 @@ export function startGame({ container, onComplete, theme }) {
     <div class="three-game-overlay__meta">
       <span data-role="timer">60.0s</span>
       <span data-role="score">Score 0</span>
+      <span data-role="combo">Combo x1.0</span>
     </div>
     <p class="three-game-overlay__hint">Drift left and right to center the hovercraft within each glowing gate.</p>
   `;
@@ -27,6 +28,9 @@ export function startGame({ container, onComplete, theme }) {
 
   const timerLabel = overlay.querySelector('[data-role="timer"]');
   const scoreLabel = overlay.querySelector('[data-role="score"]');
+  const comboLabel = overlay.querySelector('[data-role="combo"]');
+  // Hint label allows us to inject story beats as the combo and streak evolve mid-race.
+  const hintLabel = overlay.querySelector('.three-game-overlay__hint');
 
   const teardown = (finalScore, message = 'Race finished. Re-launch to chase a better combo.') => {
     if (!isRunning) return;
@@ -44,7 +48,7 @@ export function startGame({ container, onComplete, theme }) {
     }
     overlay.classList.add('three-game-overlay--complete');
     if (message) {
-      overlay.querySelector('.three-game-overlay__hint').textContent = message;
+      hintLabel.textContent = message;
     }
     scoreLabel.textContent = `Score ${Math.max(0, Math.round(finalScore))}`;
     onComplete(Math.max(0, Math.round(finalScore)));
@@ -170,6 +174,14 @@ export function startGame({ container, onComplete, theme }) {
       let distance = 0;
       let score = 0;
       let combo = 1;
+      let gateStreak = 0;
+      // Narrative phases keep the race feeling cinematic as the timer counts down.
+      const sprintPhases = [
+        { time: 0, message: 'Initiate the sprint. Thread every gate to charge your hyperdrive.' },
+        { time: 20000, message: 'Velocity syncing – maintain your streak to unlock the neon overdrive.' },
+        { time: 45000, message: 'Final push! Clean passes now are worth double combo growth.' },
+      ];
+      let phaseIndex = 0;
 
       const animate = (timestamp) => {
         if (!isRunning) return;
@@ -180,6 +192,12 @@ export function startGame({ container, onComplete, theme }) {
         const elapsed = timestamp - startTimestamp;
         const remaining = Math.max(0, duration - elapsed);
         timerLabel.textContent = `${(remaining / 1000).toFixed(1)}s`;
+
+        if (phaseIndex < sprintPhases.length && elapsed >= sprintPhases[phaseIndex].time) {
+          // Rotate story beats to guide the player through the escalating sprint.
+          hintLabel.textContent = sprintPhases[phaseIndex].message;
+          phaseIndex += 1;
+        }
 
         // Movement scaling increases over time for escalating difficulty.
         const speed = 0.025 + elapsed / 240000;
@@ -199,22 +217,40 @@ export function startGame({ container, onComplete, theme }) {
             ring.userData.passed = false;
           }
 
-          if (!ring.userData.passed && ring.position.z > craftGroup.position.z - 0.5 && ring.position.z < craftGroup.position.z + 0.5) {
+          if (
+            !ring.userData.passed &&
+            ring.position.z > craftGroup.position.z - 0.5 &&
+            ring.position.z < craftGroup.position.z + 0.5
+          ) {
             const proximity = Math.abs(ring.position.x - craftGroup.position.x);
             const precision = Math.max(0, 1.8 - proximity);
             if (precision > 0.6) {
               combo = Math.min(5, combo + 0.2);
               score += 40 * combo * precision;
               ring.userData.passed = true;
+              gateStreak += 1;
+              if (gateStreak % 4 === 0) {
+                // Reward streaks with story callouts and a burst of bonus energy.
+                hintLabel.textContent = `Streak ${gateStreak}! Overdrive coolant holding steady – keep threading the cores.`;
+                score += 120;
+              }
+              if (precision > 1.2) {
+                score += 40;
+              }
             } else {
               combo = 1;
               ring.userData.passed = true;
+              if (gateStreak >= 3) {
+                hintLabel.textContent = 'Combo reset – align early to rebuild the energy surge.';
+              }
+              gateStreak = 0;
             }
           }
         });
 
         const liveScore = score + distance * 4;
         scoreLabel.textContent = `Score ${Math.round(liveScore)}`;
+        comboLabel.textContent = `Combo x${combo.toFixed(1)}`;
 
         renderer.render(scene, camera);
 

@@ -13,6 +13,8 @@ export function startGame({ container, onComplete, theme }) {
     <div class="three-game-overlay__meta">
       <span data-role="lap">Lap 1</span>
       <span data-role="timer">60.0s</span>
+      <span data-role="combo">Combo x1</span>
+      <span data-role="speed">Speed 0%</span>
       <span data-role="score">Score 0</span>
     </div>
     <p class="three-game-overlay__hint">Drag to steer across the lane, hold W/Up to boost, S/Down to brake. Cross gates centered for combo bonuses.</p>
@@ -22,7 +24,12 @@ export function startGame({ container, onComplete, theme }) {
   const lapLabel = overlay.querySelector('[data-role="lap"]');
   const timerLabel = overlay.querySelector('[data-role="timer"]');
   const scoreLabel = overlay.querySelector('[data-role="score"]');
+  const comboLabel = overlay.querySelector('[data-role="combo"]');
+  const speedLabel = overlay.querySelector('[data-role="speed"]');
+  // Hint label surfaces evolving race commentary so the track feels alive.
   const hintLabel = overlay.querySelector('.three-game-overlay__hint');
+  comboLabel.textContent = 'Combo x1';
+  speedLabel.textContent = 'Speed 0%';
 
   // Optional control widget to provide boost/brake buttons on touch devices.
   const controlPad = document.createElement('div');
@@ -347,6 +354,9 @@ export function startGame({ container, onComplete, theme }) {
       const duration = 60000;
       let previousTime = performance.now();
       let elapsedTotal = 0;
+      let gatePerfects = 0;
+      // Narrative phase tracks which commentary beat should surface next.
+      let narrativePhase = 0;
 
       const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
@@ -406,6 +416,7 @@ export function startGame({ container, onComplete, theme }) {
         if (comboTimer <= 0) {
           combo = Math.max(1, combo - 1);
           comboTimer = 0;
+          comboLabel.textContent = `Combo x${combo}`;
         }
 
         const wrapped = previousProgress > progress;
@@ -423,8 +434,24 @@ export function startGame({ container, onComplete, theme }) {
             combo = alignment > 0.55 ? combo + 1 : 1;
             comboTimer = 4;
             gate.material.emissiveIntensity = 1.4;
+            if (alignment > 0.85) {
+              gatePerfects += 1;
+              hintLabel.textContent = `Gate synced! Reactor charge ${gatePerfects * 10}% – ride the flow.`;
+              score += 80;
+            } else if (alignment <= 0.55) {
+              hintLabel.textContent = 'Lane drift detected. Center the craft to rebuild your combo.';
+            }
+            if (combo >= 4 && narrativePhase === 0) {
+              hintLabel.textContent = 'Combo core online – neon turbines are purring. Hold the line!';
+              narrativePhase = 1;
+            } else if (combo >= 7 && narrativePhase === 1) {
+              hintLabel.textContent = 'Spectators roaring! Boost trails are visible from orbit.';
+              narrativePhase = 2;
+            }
           }
         });
+
+        comboLabel.textContent = `Combo x${combo}`;
 
         if (wrapped) {
           const pending = gates.filter((gate) => gate.userData.cleared);
@@ -435,6 +462,7 @@ export function startGame({ container, onComplete, theme }) {
               gate.userData.cleared = false;
               gate.material.emissiveIntensity = 0.7;
             });
+            hintLabel.textContent = `Lap ${lap} engaged – lane memory reset. Amplify the next streak.`;
           }
         }
       };
@@ -465,6 +493,9 @@ export function startGame({ container, onComplete, theme }) {
         updateControls(delta);
         updateCraft(delta);
         evaluateGates(delta);
+        // Surface a readable boost gauge so players sense acceleration progress.
+        const normalizedSpeed = Math.min(1, Math.max(0, (speed - 0.055) / (0.22 - 0.055)));
+        speedLabel.textContent = `Speed ${Math.round(normalizedSpeed * 100)}%`;
 
         score += delta * (speed * 1200 + combo * 45);
         scoreLabel.textContent = `Score ${Math.round(score)}`;

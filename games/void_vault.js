@@ -219,12 +219,15 @@ export function startGame({ container, onComplete, theme }) {
     inputState.right = keyboardState.right || (pointerRight && !keyboardState.left);
   };
 
+  // Prevent the browser from stealing focus with arrow key scrolling while mapping input to the avatar.
   const onKeyDown = (event) => {
     if (event.code === 'ArrowLeft' || event.code === 'KeyA') {
+      event.preventDefault();
       keyboardState.left = true;
       syncMovementState();
     }
     if (event.code === 'ArrowRight' || event.code === 'KeyD') {
+      event.preventDefault();
       keyboardState.right = true;
       syncMovementState();
     }
@@ -234,12 +237,15 @@ export function startGame({ container, onComplete, theme }) {
     }
   };
 
+  // Matching keyup guard keeps momentum control responsive after we suppress default behaviour.
   const onKeyUp = (event) => {
     if (event.code === 'ArrowLeft' || event.code === 'KeyA') {
+      event.preventDefault();
       keyboardState.left = false;
       syncMovementState();
     }
     if (event.code === 'ArrowRight' || event.code === 'KeyD') {
+      event.preventDefault();
       keyboardState.right = false;
       syncMovementState();
     }
