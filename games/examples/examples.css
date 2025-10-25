@@ -1,20 +1,20 @@
 /* =========================================================
  * Standalone styling for the game examples hub
- * Extends the global arcade palette while keeping the layout compact and centered
+ * Extends the global arcade palette while keeping the layout immersive and full-width
  * ========================================================= */
 body {
-  display: flex;
   min-height: 100vh;
-  align-items: center;
+  display: flex;
   justify-content: center;
-  padding: clamp(2rem, 5vw, 4rem);
+  align-items: stretch;
+  padding: clamp(2rem, 4vw, 3.5rem);
 }
 
 .examples-bg {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at top right, rgba(0, 255, 198, 0.25), transparent 55%),
-    radial-gradient(circle at bottom left, rgba(255, 51, 102, 0.2), transparent 60%),
+  background: radial-gradient(circle at top right, rgba(0, 255, 198, 0.22), transparent 55%),
+    radial-gradient(circle at bottom left, rgba(255, 51, 102, 0.18), transparent 60%),
     var(--color-bg, #0d0d17);
   z-index: -1;
   animation: float 16s infinite alternate ease-in-out;
@@ -30,14 +30,14 @@ body {
 }
 
 .examples-shell {
-  width: min(1080px, 100%);
+  width: min(1400px, 96vw);
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: clamp(2rem, 3.5vw, 3rem);
   background: rgba(0, 0, 0, 0.55);
-  padding: clamp(1.75rem, 3vw, 2.5rem);
-  border-radius: 28px;
-  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.55);
+  padding: clamp(1.8rem, 2.6vw, 2.6rem);
+  border-radius: 32px;
+  box-shadow: 0 30px 75px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(18px);
 }
 
@@ -45,26 +45,26 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1.5rem;
+  gap: 1.75rem;
   flex-wrap: wrap;
 }
 
-.examples-header h1 {
-  margin: 0 0 0.75rem;
-  font-size: clamp(1.4rem, 1rem + 2vw, 2.4rem);
+.examples-header__copy h1 {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.6rem, 1.25rem + 1.8vw, 2.6rem);
 }
 
-.examples-header p {
-  max-width: 52ch;
+.examples-header__copy p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.78);
+  max-width: 68ch;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .examples-back {
   align-self: center;
-  padding: 0.8rem 1.6rem;
+  padding: 0.9rem 1.8rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   color: var(--color-accent, #00ffc6);
   text-decoration: none;
   font-weight: 600;
@@ -74,13 +74,129 @@ body {
 .examples-back:hover {
   transform: translateY(-2px);
   border-color: var(--color-accent, #00ffc6);
-  background: rgba(0, 255, 198, 0.08);
+  background: rgba(0, 255, 198, 0.1);
+}
+
+.examples-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 2.35fr) minmax(280px, 1fr);
+  gap: clamp(1.6rem, 3vw, 2.4rem);
+  align-items: stretch;
+}
+
+.examples-stage__viewport {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.2rem, 2vw, 1.6rem);
+  padding: clamp(1.4rem, 2vw, 1.8rem);
+  border-radius: 26px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.examples-stage__surface {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(160deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.55));
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.examples-stage__surface.is-active {
+  border-color: rgba(0, 255, 198, 0.45);
+  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.45);
+  transform: translateY(-2px);
+}
+
+.examples-stage__overlay {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.2rem 1.4rem;
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.2));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.examples-stage__overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.examples-stage__overlay-header h2 {
+  margin: 0;
+  font-size: clamp(1.2rem, 1rem + 1vw, 1.8rem);
+}
+
+.examples-instructions {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.examples-stage__actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.examples-status {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: rgba(0, 255, 198, 0.12);
+  color: var(--color-accent, #00ffc6);
+  font-weight: 600;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.examples-status.is-alert {
+  background: rgba(255, 51, 102, 0.16);
+  color: var(--color-secondary, #ff3366);
+}
+
+.examples-outcome {
+  min-height: 1.4rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.examples-stage__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: clamp(1.2rem, 1.8vw, 1.6rem);
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-y: auto;
+  max-height: calc(100vh - 12rem);
+}
+
+.examples-stage__sidebar h3 {
+  margin: 0;
+  font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.5rem);
 }
 
 .examples-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
 }
 
 .examples-card {
@@ -89,10 +205,11 @@ body {
   flex-direction: column;
   gap: 0.75rem;
   padding: 1.35rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
   border-radius: 20px;
   border: 1px solid transparent;
-  transition: transform 0.18s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  text-align: left;
 }
 
 .examples-card.is-active {
@@ -126,99 +243,81 @@ body {
   letter-spacing: 0.08em;
 }
 
-.examples-stage {
+.examples-guides {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
-  align-items: flex-start;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1.4rem, 2.5vw, 2.2rem);
 }
 
-.examples-stage-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.examples-stage-info h2 {
-  margin: 0;
-  font-size: clamp(1.1rem, 0.9rem + 1vw, 1.6rem);
-}
-
-.examples-stage-info p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.examples-instructions {
-  margin: 0;
-  padding-left: 1.1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  color: rgba(255, 255, 255, 0.76);
-}
-
-.examples-stage-meta {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.examples-status {
-  padding: 0.4rem 0.9rem;
-  border-radius: 999px;
-  background: rgba(0, 255, 198, 0.12);
-  color: var(--color-accent, #00ffc6);
-  font-weight: 600;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.examples-status.is-alert {
-  background: rgba(255, 51, 102, 0.12);
-  color: var(--color-secondary, #ff3366);
-}
-
-.examples-outcome {
-  min-height: 1.5rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.examples-stage-canvas {
-  min-height: 320px;
-  background: rgba(255, 255, 255, 0.04);
+.examples-guides__card {
+  padding: clamp(1.4rem, 2vw, 1.8rem);
   border-radius: 22px;
-  border: 1px dashed rgba(255, 255, 255, 0.12);
-  padding: 1rem;
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  position: relative;
-  transition: border-color 0.3s ease;
+  flex-direction: column;
+  gap: 0.85rem;
+  color: rgba(255, 255, 255, 0.82);
 }
 
-.examples-stage-canvas.is-active {
-  border-color: rgba(0, 255, 198, 0.45);
+.examples-guides__card h2 {
+  margin: 0;
+  font-size: clamp(1.1rem, 0.95rem + 0.9vw, 1.6rem);
 }
 
-.examples-stage-canvas::before {
-  content: 'Game area';
-  position: absolute;
-  inset: auto auto 1rem 1rem;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.35);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.examples-guides__card pre {
+  margin: 0;
+  padding: 1rem;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Fira Code', 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  overflow-x: auto;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1200px) {
+  .examples-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .examples-stage__sidebar {
+    max-height: none;
+  }
+
+  .examples-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
   body {
     padding: 1.5rem;
   }
 
-  .examples-stage-canvas {
-    min-height: 280px;
+  .examples-shell {
+    border-radius: 24px;
+  }
+
+  .examples-stage__surface {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (max-width: 540px) {
+  .examples-stage__surface {
+    aspect-ratio: 4 / 5;
+  }
+
+  .examples-stage__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .examples-stage__sidebar {
+    padding: 1rem;
   }
 }

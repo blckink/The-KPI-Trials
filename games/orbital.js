@@ -19,6 +19,7 @@ export function startGame({ container, onComplete, theme }) {
     <div class="three-game-overlay__title">Orbital Sprint</div>
     <div class="three-game-overlay__meta">
       <span data-role="timer">45.0s</span>
+      <span data-role="integrity">Integrity 100%</span>
       <span data-role="score">Score 0</span>
     </div>
     <p class="three-game-overlay__hint">Move your cursor or finger to steer the ship – survive without crashing.</p>
@@ -27,6 +28,10 @@ export function startGame({ container, onComplete, theme }) {
 
   const timerLabel = overlay.querySelector('[data-role="timer"]');
   const scoreLabel = overlay.querySelector('[data-role="score"]');
+  const integrityLabel = overlay.querySelector('[data-role="integrity"]');
+  // Hint label delivers mission briefings and reactive warnings mid-flight.
+  const hintLabel = overlay.querySelector('.three-game-overlay__hint');
+  integrityLabel.textContent = 'Integrity 100%';
 
   const finishGame = (finalScore, message = 'Mission complete. Tap “Start Example” to play again.') => {
     if (!isActive) return;
@@ -44,7 +49,7 @@ export function startGame({ container, onComplete, theme }) {
     }
     overlay.classList.add('three-game-overlay--complete');
     if (message) {
-      overlay.querySelector('.three-game-overlay__hint').textContent = message;
+      hintLabel.textContent = message;
     }
     scoreLabel.textContent = `Score ${Math.max(0, Math.round(finalScore))}`;
     onComplete(Math.max(0, Math.round(finalScore)));
@@ -124,6 +129,7 @@ export function startGame({ container, onComplete, theme }) {
         asteroid.userData = {
           speed: 0.18 + Math.random() * 0.12,
           rotation: new THREE.Vector3(Math.random() * 0.02, Math.random() * 0.02, Math.random() * 0.02),
+          grazed: false,
         };
         scene.add(asteroid);
         asteroids.push(asteroid);
@@ -177,6 +183,12 @@ export function startGame({ container, onComplete, theme }) {
       const duration = 45000; // 45 seconds challenge
       let dodged = 0;
       let lastSpawn = 0;
+      let integrity = 100;
+      let grazeChain = 0;
+      // Graze score tracks bonus points granted for razor-close dodges.
+      let grazeScore = 0;
+      // Wave phase keeps track of when to trigger narrative callouts.
+      let wavePhase = 0;
 
       const loop = (timestamp) => {
         if (!isActive) return;
@@ -188,6 +200,15 @@ export function startGame({ container, onComplete, theme }) {
         const elapsedSeconds = (timestamp - elapsed) / 1000;
         const remaining = Math.max(0, duration - (timestamp - elapsed));
         timerLabel.textContent = `${(remaining / 1000).toFixed(1)}s`;
+
+        // Wave-based messaging keeps the sprint feeling like an unfolding mission.
+        if (wavePhase === 0 && elapsedSeconds > 10) {
+          hintLabel.textContent = 'Meteor density increasing – thread the debris field.';
+          wavePhase = 1;
+        } else if (wavePhase === 1 && elapsedSeconds > 25) {
+          hintLabel.textContent = 'Radiation storm ahead! Shields will drain faster on contact.';
+          wavePhase = 2;
+        }
 
         // Gentle parallax for the star field.
         stars.rotation.z += 0.0008;
@@ -206,16 +227,50 @@ export function startGame({ container, onComplete, theme }) {
           if (asteroid.position.z > camera.position.z + 2) {
             dodged += 1;
             asteroid.position.set((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 6, -30 - Math.random() * 20);
+            asteroid.userData.grazed = false;
           }
 
           const distance = asteroid.position.distanceTo(ship.position);
-          if (distance < 1.1) {
-            finishGame(dodged * 25 + elapsedSeconds * 10, 'Hull breach detected. Dodge faster to survive the sprint.');
-            return;
+          const directImpact = distance < 1.05;
+          const grazeImpact = !directImpact && distance < 1.55;
+          if (directImpact || grazeImpact) {
+            // Ship shields absorb hits and near misses to create richer pacing moments.
+            integrity -= directImpact ? 45 : 18;
+            integrity = Math.max(0, integrity);
+            integrityLabel.textContent = `Integrity ${integrity}%`;
+            if (directImpact) {
+              grazeChain = 0;
+              hintLabel.textContent = 'Direct impact absorbed – shield plating compromised. Keep weaving!';
+            } else {
+              grazeChain += 1;
+              grazeScore += 35 * grazeChain;
+              hintLabel.textContent = `Grazed debris! Chain bonus x${grazeChain}.`;
+              dodged += 1;
+            }
+            scoreLabel.textContent = `Score ${Math.round(dodged * 25 + elapsedSeconds * 10 + grazeScore)}`;
+            if (integrity <= 0) {
+              finishGame(dodged * 25 + elapsedSeconds * 10 + grazeScore, 'Hull breach detected. Dodge faster to survive the sprint.');
+              return;
+            }
+            asteroid.position.set((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 6, -32 - Math.random() * 18);
+            asteroid.userData.grazed = false;
+            continue;
+          }
+
+          if (!asteroid.userData.grazed && distance < 2) {
+            asteroid.userData.grazed = true;
+            grazeChain = Math.min(grazeChain + 1, 6);
+            // Lightly reward the daring line without forcing a full graze reset.
+            grazeScore += 10 * grazeChain;
+            hintLabel.textContent = `Near miss! Flux streak ${grazeChain} – keep the rhythm.`;
+            scoreLabel.textContent = `Score ${Math.round(dodged * 25 + elapsedSeconds * 10 + grazeScore)}`;
+          } else if (distance >= 2) {
+            asteroid.userData.grazed = false;
+            grazeChain = Math.max(0, grazeChain - 1);
           }
         }
 
-        const liveScore = dodged * 25 + elapsedSeconds * 10;
+        const liveScore = dodged * 25 + elapsedSeconds * 10 + grazeScore;
         scoreLabel.textContent = `Score ${Math.round(liveScore)}`;
 
         if (timestamp - lastSpawn > 1200 && asteroids.length < 24) {

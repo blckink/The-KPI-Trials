@@ -21,30 +21,69 @@
     <div class="examples-bg"></div>
     <main class="examples-shell">
       <header class="examples-header">
-        <div>
+        <div class="examples-header__copy">
           <h1>Arcade Game Examples</h1>
-          <p>Launch curated demo scenarios to validate controls, scoring, and polish for each mini-game.</p>
+          <p>
+            Launch expanded demo scenarios to validate controls, scoring, and polish for each mini-game. Select a mission,
+            dive into the full-width stage, and swap between titles without leaving the page.
+          </p>
         </div>
         <a class="examples-back" href="../../index.php">⬅ Back to Arcade</a>
       </header>
 
-      <section class="examples-grid" id="example-list" aria-label="Available game examples"></section>
-
-      <section class="examples-stage">
-        <div class="examples-stage-info">
-          <h2 id="stage-title">Pick a game to preview</h2>
-          <p id="stage-description">
-            The right panel will host the game canvas or interaction surface. Select an example card to see specifics and
-            press “Start Example” when ready.
-          </p>
-          <ul id="stage-instructions" class="examples-instructions"></ul>
-          <div class="examples-stage-meta">
-            <span id="stage-status" class="examples-status">Status: Idle</span>
-            <button id="stage-launch" class="arcade-btn" disabled>Start Example</button>
+      <section class="examples-stage" aria-label="Interactive game showcase">
+        <div class="examples-stage__viewport">
+          <div class="examples-stage__surface" id="stage-container" role="application" aria-live="polite"></div>
+          <div class="examples-stage__overlay">
+            <div class="examples-stage__overlay-header">
+              <h2 id="stage-title">Pick a game to begin</h2>
+              <span id="stage-status" class="examples-status">Status: Idle</span>
+            </div>
+            <p id="stage-description">
+              The neon arena loads at full width once you launch a demo. Choose a card from the right-hand library and tap
+              “Start Example” to boot the selected experience.
+            </p>
+            <ul id="stage-instructions" class="examples-instructions"></ul>
+            <div class="examples-stage__actions">
+              <button id="stage-launch" class="arcade-btn" disabled>Start Example</button>
+              <div id="stage-outcome" class="examples-outcome" aria-live="polite"></div>
+            </div>
           </div>
-          <div id="stage-outcome" class="examples-outcome" aria-live="polite"></div>
         </div>
-        <div id="stage-container" class="examples-stage-canvas" aria-live="polite"></div>
+        <aside class="examples-stage__sidebar" aria-label="Game library">
+          <h3>Mission Library</h3>
+          <div id="example-list" class="examples-grid" aria-live="polite"></div>
+        </aside>
+      </section>
+
+      <section class="examples-guides" aria-label="Build richer arcade content">
+        <div class="examples-guides__card">
+          <h2>Adding textures &amp; custom models</h2>
+          <p>
+            Three.js powered titles share the <code>loadThree</code> helper found in
+            <code>games/utils/three-loader.js</code>. After resolving the module you can load textures or GLTF models using
+            standard loaders:
+          </p>
+          <pre aria-label="Texture loader snippet"><code>const THREE = await loadThree();
+const textureLoader = new THREE.TextureLoader();
+const metalPanel = await textureLoader.loadAsync('assets/textures/panel.png');
+const material = new THREE.MeshStandardMaterial({ map: metalPanel, metalness: 0.7 });
+const panel = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 0.1), material);
+scene.add(panel);</code></pre>
+          <p>
+            Place texture assets inside <code>assets/textures</code> (create the folder if it does not exist) and serve them
+            relative to the project root. For GLTF files, use <code>THREE.GLTFLoader</code> from the
+            <code>examples/jsm/loaders</code> bundle and reuse the same asynchronous pattern.
+          </p>
+        </div>
+        <div class="examples-guides__card">
+          <h2>Expanding narrative &amp; scoring</h2>
+          <p>
+            Each module exposes a <code>startGame</code> function that receives <code>container</code>, <code>theme</code>,
+            and <code>onComplete</code>. Use this hook to add story beats, wave systems, or bonus challenges. Persist shared
+            utilities in <code>games/utils</code> so the arcade shell can keep the experience consistent across titles.
+          </p>
+        </div>
       </section>
     </main>
 
