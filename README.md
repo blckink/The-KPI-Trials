@@ -20,6 +20,12 @@ A responsive, mobile-ready arcade of five mini-games designed for quick employee
 3. **Verify PHP version** – The scripts use typed functions from PHP 8.0+, so confirm your hosting plan supports PHP 8 or newer.
 4. **Access the arcade** – Browse to `https://yourdomain.com/index.php` to launch the experience.
 
+### Game Examples Playground
+
+- Browse to `https://yourdomain.com/games/examples/` to open the standalone testing hub.
+- Select any mini-game card and click **Start Example** to launch a curated demo scenario with scoring guidance.
+- The examples reuse your current theme colors from `data/settings.json`, letting you preview styling and controls in isolation.
+
 ## Admin Dashboard
 
 - Navigate to `https://yourdomain.com/admin/`.

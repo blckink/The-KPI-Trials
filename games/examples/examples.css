@@ -1,0 +1,224 @@
+/* =========================================================
+ * Standalone styling for the game examples hub
+ * Extends the global arcade palette while keeping the layout compact and centered
+ * ========================================================= */
+body {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+.examples-bg {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(0, 255, 198, 0.25), transparent 55%),
+    radial-gradient(circle at bottom left, rgba(255, 51, 102, 0.2), transparent 60%),
+    var(--color-bg, #0d0d17);
+  z-index: -1;
+  animation: float 16s infinite alternate ease-in-out;
+}
+
+@keyframes float {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.04);
+  }
+}
+
+.examples-shell {
+  width: min(1080px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  background: rgba(0, 0, 0, 0.55);
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+  border-radius: 28px;
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(18px);
+}
+
+.examples-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.examples-header h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.4rem, 1rem + 2vw, 2.4rem);
+}
+
+.examples-header p {
+  max-width: 52ch;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.examples-back {
+  align-self: center;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--color-accent, #00ffc6);
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.examples-back:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-accent, #00ffc6);
+  background: rgba(0, 255, 198, 0.08);
+}
+
+.examples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.2rem;
+}
+
+.examples-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.35rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  border: 1px solid transparent;
+  transition: transform 0.18s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.examples-card.is-active {
+  border-color: var(--color-accent, #00ffc6);
+  box-shadow: 0 18px 35px rgba(0, 255, 198, 0.18);
+  transform: translateY(-4px);
+}
+
+.examples-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.examples-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.examples-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.82);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.examples-stage {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.examples-stage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.examples-stage-info h2 {
+  margin: 0;
+  font-size: clamp(1.1rem, 0.9rem + 1vw, 1.6rem);
+}
+
+.examples-stage-info p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.examples-instructions {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.examples-stage-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.examples-status {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(0, 255, 198, 0.12);
+  color: var(--color-accent, #00ffc6);
+  font-weight: 600;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.examples-status.is-alert {
+  background: rgba(255, 51, 102, 0.12);
+  color: var(--color-secondary, #ff3366);
+}
+
+.examples-outcome {
+  min-height: 1.5rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.examples-stage-canvas {
+  min-height: 320px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 22px;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.3s ease;
+}
+
+.examples-stage-canvas.is-active {
+  border-color: rgba(0, 255, 198, 0.45);
+}
+
+.examples-stage-canvas::before {
+  content: 'Game area';
+  position: absolute;
+  inset: auto auto 1rem 1rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  body {
+    padding: 1.5rem;
+  }
+
+  .examples-stage-canvas {
+    min-height: 280px;
+  }
+}
