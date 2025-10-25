@@ -158,8 +158,17 @@ const loadGameModule = async (gameKey) => {
   return module.startGame;
 };
 
+/* =========================================================
+ * Presentation helpers for UI labels
+ * ========================================================= */
+const formatGameTitle = (key) =>
+  key
+    .split('_')
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+
 const runGame = async (gameKey, position, totalGames) => {
-  gameTitle.textContent = `Playing: ${gameKey.toUpperCase()}`;
+  gameTitle.textContent = `Playing: ${formatGameTitle(gameKey)}`;
   gameProgress.textContent = `Game ${position}/${totalGames}`;
   updateStatus('Competing...', false);
 
