@@ -70,6 +70,28 @@ const GAME_EXAMPLES = [
       'Crossing the EXIT tile awards an extra 100 points.',
     ],
   },
+  {
+    key: 'orbital',
+    title: 'Orbital Sprint – Asteroid Run',
+    tag: '3D Reflex',
+    description: 'Pilot a neon spacecraft through an asteroid field rendered with WebGL. Survive the 45-second sprint.',
+    instructions: [
+      'Move the cursor (or finger) across the canvas to steer the ship left/right and up/down.',
+      'Dodging asteroids builds combo points – grazing debris will end the mission instantly.',
+      'The overlay shows the timer and score in real-time, making it easy to validate scoring.',
+    ],
+  },
+  {
+    key: 'holo_rally',
+    title: 'Holo Rally – Gate Chaser',
+    tag: '3D Precision',
+    description: 'Glide a hovercraft through glowing gates, chaining precise passes to amplify the combo multiplier.',
+    instructions: [
+      'Slide the cursor (or touch) horizontally to align with upcoming gates.',
+      'Centering within a gate boosts the combo; missing the core resets your multiplier.',
+      'Race lasts 60 seconds – the final score blends distance, accuracy, and combo streaks.',
+    ],
+  },
 ];
 
 /* =========================================================
