@@ -6,5 +6,5 @@
     "bg": "#0d0d17",
     "text": "#ffffff"
   },
-  "gameOrder": ["quiz", "jump", "reaction", "driver", "escape", "orbital", "holo_rally"]
+  "gameOrder": ["quiz", "jump", "reaction", "driver", "escape", "void_vault", "orbital", "track_velocity", "holo_rally"]
 }

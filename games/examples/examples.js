@@ -71,6 +71,17 @@ const GAME_EXAMPLES = [
     ],
   },
   {
+    key: 'void_vault',
+    title: 'Void Vault – Neon Metroidvania',
+    tag: 'Adventure',
+    description: 'Dive through a single-level vault, collecting relics, syncing checkpoints, and unlocking the exit portal.',
+    instructions: [
+      'Use A/D or arrow keys (or the touch buttons) to move, Space to jump.',
+      'You have one mid-air jump – use it to reach suspended platforms and relics.',
+      'Collect every relic to unlock the portal; stability drains when you fall onto spikes.',
+    ],
+  },
+  {
     key: 'orbital',
     title: 'Orbital Sprint – Asteroid Run',
     tag: '3D Reflex',
@@ -79,6 +90,17 @@ const GAME_EXAMPLES = [
       'Move the cursor (or finger) across the canvas to steer the ship left/right and up/down.',
       'Dodging asteroids builds combo points – grazing debris will end the mission instantly.',
       'The overlay shows the timer and score in real-time, making it easy to validate scoring.',
+    ],
+  },
+  {
+    key: 'track_velocity',
+    title: 'Track Velocity – Hover Sprint',
+    tag: '3D Racing',
+    description: 'Glide along a tubular neon track inspired by Trackmania. Chain precise gate clears to amplify combo scores.',
+    instructions: [
+      'Steer with A/D, arrow keys, or by dragging on the canvas to shift lanes.',
+      'Hold W/Up (or the Boost button) to accelerate and S/Down to brake.',
+      'Align centrally through neon gates to build combo multipliers before the 60-second timer expires.',
     ],
   },
   {
